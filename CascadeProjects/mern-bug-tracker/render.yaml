@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: bug-tracker-backend
+    env: node
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromDatabase:
+          name: bug-tracker-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRE
+        value: 30d
+    healthCheckPath: /api/health
+    autoDeploy: true
+
+databases:
+  - name: bug-tracker-db
+    databaseName: bugtracker
+    user: bugtracker_user
+    plan: free
+    region: oregon
